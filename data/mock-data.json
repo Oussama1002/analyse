@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "company": "Softnovation",
+    "market": "Morocco",
+    "lastUpdated": "2026-06-07"
+  },
+  "kpis": {
+    "totalClients": 21,
+    "totalLeads": 168,
+    "conversionRate": 12.5,
+    "cacAverage": 4200,
+    "retentionRate": 48,
+    "revenueEstimate": 945000
+  },
+  "clients": {
+    "totalClients": 21,
+    "activeClients": 14,
+    "closedClients": 7,
+    "recurringClients": 10,
+    "oneShotClients": 11,
+    "retentionRate": 48,
+    "clientsByType": {
+      "PME Morocco": 12,
+      "Startups": 6,
+      "International": 3
+    }
+  },
+  "acquisition": {
+    "channels": [
+      { "name": "Network of founder", "count": 14, "percentage": 67 },
+      { "name": "LinkedIn outbound", "count": 4, "percentage": 19 },
+      { "name": "Referrals", "count": 2, "percentage": 10 },
+      { "name": "Partnerships", "count": 1, "percentage": 5 },
+      { "name": "Ads", "count": 0, "percentage": 0 },
+      { "name": "SEO", "count": 0, "percentage": 0 }
+    ],
+    "founderDependency": 67,
+    "scalabilityScore": 34
+  },
+  "leads": {
+    "totalLeads": 168,
+    "inboundLeads": 72,
+    "outboundLeads": 96,
+    "mql": 52,
+    "sql": 34,
+    "convertedLeads": 21,
+    "conversionRate": 12.5
+  }
+}

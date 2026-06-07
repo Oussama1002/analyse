@@ -1,65 +1,119 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { KPICard } from "@/components/shared/kpi-card";
+import { ChartCard } from "@/components/shared/chart-card";
+import { CustomPieChart } from "@/components/charts/pie-chart";
+import { CustomLineChart } from "@/components/charts/line-chart";
+import { FunnelChart } from "@/components/charts/funnel-chart";
+import { InsightsButton } from "@/components/insights/insights-button";
+import { mockData } from "@/lib/data/mock-data";
+import { formatCurrency, formatPercent } from "@/lib/utils";
+import { fr, labelChannel, labelClientType } from "@/lib/i18n/fr";
+import {
+  Users,
+  Target,
+  TrendingUp,
+  DollarSign,
+  RefreshCw,
+  Wallet,
+} from "lucide-react";
+
+export default function DashboardPage() {
+  const { kpis, clients, acquisition, leads, financial } = mockData;
+
+  const segmentationData = Object.entries(clients.clientsByType).map(
+    ([name, value]) => ({ name: labelClientType(name as keyof typeof clients.clientsByType), value })
+  );
+
+  const acquisitionData = acquisition.channels
+    .filter((c) => c.count > 0)
+    .map((c) => ({ name: labelChannel(c.name), value: c.count }));
+
+  const funnelData = [
+    { name: fr.dashboard.funnelLeads, value: leads.totalLeads },
+    { name: "MQL", value: leads.mql },
+    { name: "SQL", value: leads.sql },
+    { name: fr.dashboard.funnelClients, value: leads.convertedLeads },
+  ];
+
+  const revenueVsCost = financial.revenueVsCost.map((d) => ({
+    name: d.month,
+    [fr.common.revenue]: d.revenue / 1000,
+    [fr.common.cost]: d.cost / 1000,
+  }));
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <DashboardLayout
+      title={fr.dashboard.title}
+      description={fr.dashboard.description}
+    >
+      <div className="space-y-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <KPICard
+            title={fr.dashboard.totalClients}
+            value={String(kpis.totalClients)}
+            icon={Users}
+            trend={{ value: fr.dashboard.trendQuarter, positive: true }}
+          />
+          <KPICard
+            title={fr.dashboard.totalLeads}
+            value={String(kpis.totalLeads)}
+            icon={Target}
+            trend={{ value: fr.dashboard.trendJune, positive: true }}
+          />
+          <KPICard
+            title={fr.dashboard.conversionRate}
+            value={formatPercent(kpis.conversionRate)}
+            icon={TrendingUp}
+            subtitle={fr.dashboard.leadToClient}
+          />
+          <KPICard
+            title={fr.dashboard.avgCac}
+            value={formatCurrency(kpis.cacAverage)}
+            icon={DollarSign}
+          />
+          <KPICard
+            title={fr.dashboard.retentionRate}
+            value={formatPercent(kpis.retentionRate)}
+            icon={RefreshCw}
+          />
+          <KPICard
+            title={fr.dashboard.revenueEstimate}
+            value={formatCurrency(kpis.revenueEstimate)}
+            icon={Wallet}
+            subtitle={fr.dashboard.ytdCumulative}
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <ChartCard title={fr.dashboard.salesFunnel} description={fr.dashboard.salesFunnelDesc}>
+            <FunnelChart data={funnelData} />
+          </ChartCard>
+
+          <ChartCard title={fr.dashboard.acquisitionSources} description={fr.dashboard.acquisitionSourcesDesc}>
+            <CustomPieChart data={acquisitionData} />
+          </ChartCard>
+
+          <ChartCard title={fr.dashboard.clientSegmentation} description={fr.dashboard.clientSegmentationDesc}>
+            <CustomPieChart data={segmentationData} innerRadius={60} outerRadius={100} />
+          </ChartCard>
+
+          <ChartCard title={fr.dashboard.revenueVsCost} description={fr.dashboard.revenueVsCostDesc}>
+            <CustomLineChart
+              data={revenueVsCost}
+              lines={[
+                { dataKey: fr.common.revenue, name: fr.dashboard.revenueK, color: "#10b981" },
+                { dataKey: fr.common.cost, name: fr.dashboard.costK, color: "#ef4444" },
+              ]}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </ChartCard>
         </div>
-      </main>
-    </div>
+
+        <ChartCard title={fr.dashboard.businessIntelligence} description={fr.dashboard.businessIntelligenceDesc}>
+          <InsightsButton />
+        </ChartCard>
+      </div>
+    </DashboardLayout>
   );
 }

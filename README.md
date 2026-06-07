@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# analyse
+
+Tableau de bord **Softnovation — Intelligence Marché & Performance** pour le diagnostic marché, l'acquisition clients, le CRM et la performance financière.
+
+## Tech Stack
+
+- **Next.js 15+** (App Router)
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Shadcn/UI-style components**
+- **Recharts** (all charts)
+- **@dnd-kit** (CRM Kanban drag & drop)
+- **next-themes** (dark / light mode)
+- **Local JSON** mock data + localStorage persistence for CRM & Strategy
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+cd softnovation-dashboard
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Modules
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route | Module |
+|-------|--------|
+| `/` | Global Dashboard + Insights Engine |
+| `/clients` | Client segmentation & retention |
+| `/leads` | Lead funnel & evolution |
+| `/crm` | Drag & drop Kanban pipeline |
+| `/acquisition` | Acquisition channel analysis |
+| `/linkedin` | Personal branding metrics |
+| `/social` | Multi-platform social media |
+| `/finance` | CAC, LTV, ROI analysis |
+| `/strategy` | Editable strategic documents |
 
-## Learn More
+## Mock Data
 
-To learn more about Next.js, take a look at the following resources:
+Based on real Softnovation benchmarks:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 21 clients · 168 leads · 12.5% conversion
+- 48% retention · 67% founder network dependency
+- CAC 4,200 MAD · LTV 45,000 MAD
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Data lives in `src/lib/data/` (TypeScript) and `data/mock-data.json`.
 
-## Deploy on Vercel
+## Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- KPI cards across all modules
+- Recharts pie, bar, line, and funnel charts
+- **Generate Business Insights** — SWOT analysis from live data
+- CRM Kanban with drag & drop + activity logs
+- Strategy docs with edit, tags, and version history
+- Dark / light mode toggle
+- Fully responsive sidebar navigation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Build
+
+```bash
+npm run build
+npm start
+```
